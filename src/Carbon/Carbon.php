@@ -17,6 +17,7 @@ use DateTimeZone;
 use DateInterval;
 use DatePeriod;
 use InvalidArgumentException;
+use Evals\App\Presenters\PresenterTrait;
 
 /**
  * A simple API extension for DateTime
@@ -53,6 +54,8 @@ use InvalidArgumentException;
  */
 class Carbon extends DateTime
 {
+    use PresenterTrait;
+    
     /**
      * The day constants
      */
@@ -129,6 +132,8 @@ class Carbon extends DateTime
      * @var Carbon
      */
     protected static $testNow;
+    
+    protected $presenter = \Evals\App\Presenters\CarbonPresenter::class;
 
     /**
      * Creates a DateTimeZone from a string or a DateTimeZone
