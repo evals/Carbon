@@ -2274,6 +2274,13 @@ class Carbon extends DateTime
         return $this->format('md') === $dt->format('md');
     }
     
+    /**
+     * Get start, end, and progress data for a specified period.
+     *
+     * @param $period, Carbon $start, Carbon $finish
+     *
+     * @return array
+     */
     public function periodData($period = 'monthly', Carbon $start = null, Carbon $finish = null)
     {
         $temp = new Carbon;
