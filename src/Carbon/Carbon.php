@@ -2325,12 +2325,14 @@ class Carbon extends DateTime
                 break;
             case 'semi-annually':
                 if ($this->month < 7) {
+                    $diff = 6 - $this->month;
                     $data['begin'] = $this->startOfYear()->toDateTimeString();
                     $data['beginstamp'] = $this->timestamp;
-                    $data['end'] = $temp->addMonths(6 - $this->month)->endOfMonth()->toDateTimeString();
+                    $data['end'] = $temp->addMonths($diff)->endOfMonth()->toDateTimeString();
                     $data['endstamp'] = $temp->timestamp;
                 } else {
-                    $data['begin'] = $temp->subMonths($this->month - 7)->startOfMonth()->toDateTimeString();
+                    $diff = $this->month - 7;
+                    $data['begin'] = $temp->subMonths($diff)->startOfMonth()->toDateTimeString();
                     $data['beginstamp'] = $temp->timestamp;
                     $data['end'] = $this->endOfYear()->toDateTimeString();
                     $data['endstamp'] = $this->timestamp;
