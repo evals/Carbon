@@ -2273,4 +2273,84 @@ class Carbon extends DateTime
     {
         return $this->format('md') === $dt->format('md');
     }
+    
+    public function periodData($period = 'monthly', Carbon $start = null, Carbon $finish = null)
+    {
+        $temp = new Carbon;
+        $data['nowstamp'] = $this->now()->timestamp;
+        switch ($period) {
+            case 'daily':
+                $data['begin'] = $this->startOfDay()->toDateTimeString();
+                $data['beginstamp'] = $this->timestamp;
+                $data['end'] = $this->endOfDay()->toDateTimeString();
+                $data['endstamp'] = $this->timestamp;
+                break;
+            case 'weekly':
+                $data['begin'] = $this->startOfWeek()->toDateTimeString();
+                $data['beginstamp'] = $this->timestamp;
+                $data['end'] = $this->endOfWeek()->toDateTimeString();
+                $data['endstamp'] = $this->timestamp;
+                break;
+            case 'bi-weekly':
+                if ($this->weekOfYear % 2 == 1) {
+                    $data['begin'] = $this->startOfWeek()->toDateTimeString();
+                    $data['beginstamp'] = $this->timestamp;
+                    $data['end'] = $temp->addWeek()->endOfWeek()->toDateTimeString();
+                    $data['endstamp'] = $temp->timestamp;
+                } else {
+                    $data['begin'] = $temp->subWeek()->startOfWeek()->toDateTimeString();
+                    $data['beginstamp'] = $temp->timestamp;
+                    $data['end'] = $this->endOfWeek()->toDateTimeString();
+                    $data['endstamp'] = $this->timestamp;
+                }
+                break;
+            case 'monthly':
+                $data['begin'] = $this->startOfMonth()->toDateTimeString();
+                $data['beginstamp'] = $this->timestamp;
+                $data['end'] = $this->endOfMonth()->toDateTimeString();
+                $data['endstamp'] = $this->timestamp;
+                break;
+            case 'quarterly' :
+                $data['begin'] = $this->firstOfQuarter()->startOfMonth()->toDateTimeString();
+                $data['beginstamp'] = $this->timestamp;
+                $data['end'] = $this->lastOfQuarter()->endOfMonth()->toDateTimeString();
+                $data['endstamp'] = $this->timestamp;
+                break;
+            case 'semi-annually':
+                if ($this->month < 7) {
+                    $data['begin'] = $this->startOfYear()->toDateTimeString();
+                    $data['beginstamp'] = $this->timestamp;
+                    $data['end'] = $temp->addMonths(6 - $this->month)->endOfMonth()->toDateTimeString();
+                    $data['endstamp'] = $temp->timestamp;
+                } else {
+                    $data['begin'] = $temp->subMonths($this->month - 7)->startOfMonth()->toDateTimeString();
+                    $data['beginstamp'] = $temp->timestamp;
+                    $data['end'] = $this->endOfYear()->toDateTimeString();
+                    $data['endstamp'] = $this->timestamp;
+                }
+                break;
+            case 'yearly':
+                $data['begin'] = $this->startOfYear()->toDateTimeString();
+                $data['beginstamp'] = $this->timestamp;
+                $data['end'] = $this->endOfYear()->toDateTimeString();
+                $data['endstamp'] = $this->timestamp;
+                break;
+            case 'custom':
+                if ($start->timestamp < $finish->timestamp) {
+                    $data['begin'] = $start->startOfDay()->toDateTimeString();
+                    $data['beginstamp'] = $start->timestamp;
+                    $data['end'] = $finish->endOfDay()->toDateTimeString();
+                    $data['endstamp'] = $finish->timestamp;
+                } else {
+                    return null;
+                }
+                break;
+            default:
+                return [];
+        }
+
+        $data['progress'] = floor((($data['nowstamp'] - $data['beginstamp']) / ($data['endstamp'] - $data['beginstamp'])) * 100);
+        $this->now();
+        return $data;
+    }
 }
