@@ -2315,13 +2315,13 @@ class Carbon extends DateTime
                 if ($this->day <= 15) {
                     $data['begin'] = $this->startOfMonth()->toDateTimeString();
                     $data['beginstamp'] = $this->timestamp;
-                    $data['end'] = $this->addDays(15)->endOfDay()->toDateTimeString();
+                    $data['end'] = $this->addDays(14)->endOfDay()->toDateTimeString();
                     $data['endstamp'] = $this->timestamp;
                 } else {
+                    $data['begin'] = $this->startOfMonth()->addDays(15)->toDateTimeString();
+                    $data['beginstamp'] = $this->timestamp;
                     $data['end'] = $this->endOfMonth()->toDateTimeString();
                     $data['endstamp'] = $this->timestamp;
-                    $data['begin'] = $this->subDays(15)->startOfDay()->toDateTimeString();
-                    $data['beginstamp'] = $this->timestamp;
                 }
                 break;
             case 'monthly':
